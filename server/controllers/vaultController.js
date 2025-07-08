@@ -11,6 +11,14 @@ exports.addCredential = async (req, res) => {
     const encryptedPassword = encrypt(password);
 
     const user = await User.findById(userId);
+    // console.log("isPro:", user.isPro, "vault length:", user.vault.length);
+    // Enforce Free plan limit
+    if (!user.isPro && user.vault.length >= 10) {
+      return res.status(403).json({
+        error:
+          "Free plan limit reached. Upgrade to Pro for unlimited passwords.",
+      });
+    }
     user.vault.push({
       site,
       username,

@@ -13,6 +13,7 @@ import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import ResetPassword from "./pages/ResetPassword";
 import SetNewPassword from "./pages/SetNewPassword";
+import Pricing from "./pages/Pricing";
 import { Button } from "./components/ui/button";
 import { useEffect } from "react";
 import "./App.css";
@@ -58,6 +59,9 @@ export default function App() {
                 <Button variant="outline">Register</Button>
               </Link>
             )}
+            <Link to="/pricing">
+              <Button variant="outline">Pricing</Button>
+            </Link>
             <Link to="/dashboard">
               <Button>Dashboard</Button>
             </Link>
@@ -82,6 +86,7 @@ export default function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/reset-password/:token" element={<SetNewPassword />} />
+        <Route path="/pricing" element={<Pricing />} />
       </Routes>
     </>
   );

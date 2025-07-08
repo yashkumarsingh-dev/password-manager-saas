@@ -9,6 +9,7 @@ const authRoutes = require("./routes/auth");
 const vaultRoutes = require("./routes/vault");
 const errorHandler = require("./middleware/errorHandler");
 const utilsRoutes = require("./routes/utils");
+const paymentRoutes = require("./routes/payment");
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/vault", vaultRoutes);
 app.use("/api/utils", utilsRoutes);
+app.use("/api/payment", paymentRoutes);
 
 // Error handling middleware (must be last)
 app.use(errorHandler);

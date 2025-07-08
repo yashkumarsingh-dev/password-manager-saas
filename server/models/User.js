@@ -16,6 +16,14 @@ const userSchema = new mongoose.Schema({
   vault: [vaultEntrySchema],
   resetPasswordToken: { type: String },
   resetPasswordExpires: { type: Date },
+  // Subscription fields
+  isPro: { type: Boolean, default: false },
+  razorpayCustomerId: { type: String },
+  subscriptionStatus: {
+    type: String,
+    enum: ["inactive", "active", "cancelled"],
+    default: "inactive",
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

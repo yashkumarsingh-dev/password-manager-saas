@@ -1,4 +1,6 @@
 import { Button } from "../components/ui/button";
+import PricingSectionCards from "../components/cards";
+import { Link } from "react-router-dom";
 
 export default function Landing() {
   return (
@@ -53,6 +55,14 @@ export default function Landing() {
                 Log In
               </Button>
             </a>
+            <Link to="/pricing">
+              <Button
+                size="lg"
+                variant="secondary"
+                className="text-base font-semibold transition-all duration-200 hover:scale-105">
+                Pricing
+              </Button>
+            </Link>
           </div>
           <div className="flex flex-wrap gap-2 justify-center md:justify-start">
             <span className="bg-violet-900/40 text-violet-300 px-3 py-1 rounded-full text-xs font-medium">
@@ -74,6 +84,11 @@ export default function Landing() {
             style={{ maxWidth: 420, maxHeight: 340 }}
           />
         </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="w-full z-10 fade-in">
+        <PricingSectionCards />
       </section>
 
       {/* Features Section */}
