@@ -1,6 +1,14 @@
 # 🔐 Password Manager SaaS
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Click%20Here-brightgreen?style=for-the-badge)](https://password-manager-saas.vercel.app/)
+
 A modern, secure, and production-ready **Password Manager SaaS** built with **React (Vite)**, **Node.js/Express**, and **MongoDB Atlas**. Features robust authentication, end-to-end encryption, a beautiful dark UI, and a seamless **Razorpay** subscription system.
+
+---
+
+## 🚀 Live Demo
+
+**Try it now:** [https://password-manager-saas.vercel.app/](https://password-manager-saas.vercel.app/)
 
 ---
 
@@ -185,8 +193,8 @@ npm run dev
 
 ## 🌐 Production Deployment
 
-- **Frontend:** Vercel / Netlify
-- **Backend:** Railway / Render / Any Node.js host
+- **Frontend:** [Vercel](https://vercel.com/) ([Live Site](https://password-manager-saas.vercel.app/))
+- **Backend:** [Railway](https://railway.app/) (Node.js/Express API)
 - **Database:** MongoDB Atlas
 - Set all environment variables in your deployment platform
 - Use HTTPS for backend in production (required by Razorpay Live Mode)
