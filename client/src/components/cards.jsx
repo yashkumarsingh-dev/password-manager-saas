@@ -155,7 +155,7 @@ export default function PricingSectionCards() {
     let orderRes;
     try {
       orderRes = await axios.post(
-        "http://localhost:5000/api/payment/create-order",
+        `${import.meta.env.VITE_API_URL}/api/payment/create-order`,
         { userId },
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );
@@ -184,7 +184,7 @@ export default function PricingSectionCards() {
         // 4. Verify payment
         try {
           const verifyRes = await axios.post(
-            "http://localhost:5000/api/payment/verify-payment",
+            `${import.meta.env.VITE_API_URL}/api/payment/verify-payment`,
             {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
