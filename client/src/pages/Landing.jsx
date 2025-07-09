@@ -86,11 +86,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section className="w-full z-10 fade-in">
-        <PricingSectionCards />
-      </section>
-
       {/* Features Section */}
       <section className="w-full py-12 grid grid-cols-1 md:grid-cols-3 gap-8 z-10 fade-in">
         <div className="bg-[hsla(var(--card),0.6)] backdrop-blur-md rounded-xl p-8 border border-[rgba(255,255,255,0.15)] shadow-md flex flex-col items-center text-center transition-all duration-200 hover:shadow-xl hover:scale-105">

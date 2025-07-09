@@ -24,6 +24,8 @@ export default function App() {
   const isLoggedIn = !!localStorage.getItem("accessToken");
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("isPro");
     navigate("/");
   };
 

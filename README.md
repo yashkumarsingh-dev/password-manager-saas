@@ -1,140 +1,137 @@
 # 🔐 Password Manager SaaS
 
-A secure, full-featured **Password Manager SaaS** application built with **React (Vite)**, **Node.js**, **Express**, and **MongoDB**. Offers end-to-end encryption, tiered pricing plans, and **Razorpay** payment gateway integration. The UI is styled using **Tailwind CSS** and **shadcn/ui** components.
+A modern, secure, and production-ready **Password Manager SaaS** built with **React (Vite)**, **Node.js/Express**, and **MongoDB Atlas**. Features robust authentication, end-to-end encryption, a beautiful dark UI, and a seamless **Razorpay** subscription system.
 
 ---
 
 ## 🌟 Features
 
-- 🔐 Securely store and manage passwords
-- 🔑 End-to-End Encryption (E2EE)
-- 👤 JWT-based authentication and protected routes
-- 🔁 Forgot Password & Reset flow
-- 💳 Razorpay-based subscription system (Free & Pro)
-- 📊 Usage restriction for free-tier (max 10 passwords)
-- 🎨 Modern dark-themed UI using `shadcn/ui` and Tailwind
-- 📱 Fully responsive design
+- Securely store and manage passwords (vault)
+- End-to-End Encryption (E2EE) for all credentials
+- JWT-based authentication and protected routes
+- Two-Factor Authentication (2FA) with TOTP
+- Password reset via email (Gmail SMTP or SendGrid)
+- Free plan: 1 user, up to 10 passwords, basic features
+- Pro plan: 1 user, unlimited passwords, premium features (sharing, priority support)
+- Razorpay-based subscription and payment flow
+- Pro badge and UI for subscribed users
+- Export/import passwords (CSV, PDF)
+- Modern, responsive UI with **Tailwind CSS** and **shadcn/ui**
+- Dark mode by default
 
 ---
 
 ## 💳 Pricing Plans
 
-| Plan     | Price        | Features                                          |
-|----------|--------------|---------------------------------------------------|
-| Free     | ₹0/month     | 1 user, up to 10 saved passwords, basic support   |
-| Pro      | ₹399/month   | 1 user, unlimited passwords, premium support      |
+| Plan | Price      | Features                                      |
+| ---- | ---------- | --------------------------------------------- |
+| Free | ₹0/month   | 1 user, up to 10 passwords, basic features    |
+| Pro  | ₹399/month | 1 user, unlimited passwords, premium features |
 
-> Payments are processed via **Razorpay Checkout**, and webhook logic updates subscription status in real-time.
+> Payments are processed via **Razorpay Checkout**. Pro status is activated instantly after payment verification.
 
 ---
 
 ## 🚀 Tech Stack
 
-### Frontend:
+**Frontend:**
+
 - React (Vite)
 - Tailwind CSS
 - shadcn/ui
 - Razorpay Checkout integration
 
-### Backend:
+**Backend:**
+
 - Node.js + Express
-- MongoDB + Mongoose
-- Razorpay SDK + Webhooks
+- MongoDB Atlas + Mongoose
+- Razorpay SDK
 - JWT Authentication
 
 ---
 
 ## 📂 Project Structure
 
+```
 password-manager-saas/
-├── client/ # React frontend (Vite)
-├── server/ # Express backend
+├── client/   # React frontend (Vite)
+├── server/   # Express backend
 ├── README.md
+```
 
 ---
 
-## 🔐 API Endpoints
+## 🔐 API Endpoints (Key)
 
 ### Auth:
+
 - `POST /api/auth/register` – Register a new user
-- `POST /api/auth/login` – Login user and return token
-- `POST /api/auth/forgot-password` – Send password reset link
+- `POST /api/auth/login` – Login user and return token & userId
+- `GET /api/auth/me` – Get current user's status (Pro/Free)
+- `POST /api/auth/request-reset` – Send password reset link
 - `POST /api/auth/reset-password` – Reset password via token
 
-### Passwords:
-- `GET /api/passwords` – Get all saved passwords
-- `POST /api/passwords` – Add new password (limit 10 on Free plan)
-- `DELETE /api/passwords/:id` – Delete a saved password
+### Vault:
+
+- `GET /api/vault/list` – Get all saved passwords
+- `POST /api/vault/add` – Add new password (limit 10 on Free plan)
+- `PUT /api/vault/edit/:id` – Edit a saved password
+- `DELETE /api/vault/delete/:id` – Delete a saved password
+- `GET /api/vault/export/csv` – Export passwords as CSV
+- `GET /api/vault/export/pdf` – Export passwords as PDF
 
 ### Payment:
+
 - `POST /api/payment/create-order` – Create Razorpay order
-- `POST /api/payment/verify` – Verify Razorpay payment
-- `POST /api/payment/webhook` – Handle webhook events
-- `GET /api/payment/status` – Return current user's plan
+- `POST /api/payment/verify-payment` – Verify Razorpay payment and activate Pro
 
 ---
 
 ## 💸 Razorpay Integration Flow
 
-### Backend:
-- Create order using Razorpay SDK (`razorpay.orders.create`)
-- Verify the payment signature
-- Update user's `isPro` flag and subscription details in MongoDB
-- Enforce Free Plan restrictions (max 10 passwords)
-- Listen to `payment.captured` via webhooks to auto-upgrade users
+- User clicks "Subscribe" on the Pro plan (must be logged in)
+- Frontend calls `/api/payment/create-order` to get a Razorpay order
+- Razorpay Checkout modal is launched
+- On payment success, frontend calls `/api/payment/verify-payment`
+- If verified, user is upgraded to Pro (unlimited passwords, premium features)
+- Pro status is always synced from the backend
 
-### Frontend:
-- Dedicated `/pricing` route and section on landing page
-- Razorpay Checkout launched on "Subscribe" click
-- If not logged in → redirect to login
-- If logged in → call `/create-order`, launch Checkout
-- On payment success → call `/verify`, reflect "Pro" status in UI
-- Add "Manage Plan" or "Upgrade" buttons conditionally for Pro/Free users
+### 🧪 Test Payments (Razorpay Test Mode)
+
+- **Card:** 4111 1111 1111 1111
+- **Expiry:** Any future date
+- **CVV:** Any 3-digit number
+- **OTP:** 123456
+- [Full list of test cards & UPI](https://razorpay.com/docs/payments/payment-gateway/test-card-upi-details/)
 
 ---
 
-## 🎨 Pricing UI Design with `shadcn/ui`
+## ⚙️ Environment Variables
 
-Use this command to scaffold the pricing section:
+### Backend (`server/.env`)
 
-```bash
-npx shadcn@canary add https://www.shadcn-ui-blocks.com/r/pricing-sections__cards.json?token=
-✅ Pricing UI Should:
-•	✅ Include 2 pricing tiers (Free & Pro)
-•	✅ Include Monthly/Annual toggle (optional)
-•	✅ Highlight "Pro" as the most popular plan
-•	✅ Match the existing dark mode theme and styling
-The pricing section should be added both on the /pricing page and the landing page below the hero section.
-________________________________________
-⚙️ Environment Variables
-Backend (server/.env)
+```
 PORT=5000
-MONGO_URI=your_mongodb_connection
+MONGO_URI=your_mongodb_atlas_connection
 JWT_SECRET=your_jwt_secret
 RAZORPAY_KEY_ID=rzp_test_...
 RAZORPAY_KEY_SECRET=your_key_secret
 FRONTEND_URL=http://localhost:5173
-Frontend (client/.env)
+```
+
+### Frontend (`client/.env`)
+
+```
 VITE_RAZORPAY_KEY_ID=rzp_test_...
-________________________________________
-🧪 Razorpay Test Payments
-Use these in Test Mode:
-•	Card: 4111 1111 1111 1111
-•	Expiry: Any future date
-•	CVV: Any 3-digit number
-•	OTP: 123456
-📚 Full list of test UPI/cards
-________________________________________
-🔐 Forgot Password Flow
-1.	User enters email in the "Forgot Password" form
-2.	Backend generates secure token and sends reset link
-3.	User clicks link → opens /reset-password/:token
-4.	Enters new password → verified → updated in DB
-5.	Redirected to login page with success notification
-________________________________________
-🛠️ Local Setup
+```
+
+---
+
+## 🛠️ Local Setup
+
+```bash
 # Clone the repository
-git clone https://github.com/YashSingh/password-manager-saas.git
+https://github.com/YashSingh/password-manager-saas.git
 cd password-manager-saas
 
 # Install frontend dependencies
@@ -144,34 +141,48 @@ npm install
 # Install backend dependencies
 cd ../server
 npm install
-Start the project:
-# Terminal 1 (backend)
-cd server
+
+# Start the backend
 npm run dev
 
-# Terminal 2 (frontend)
+# Start the frontend (in a new terminal)
 cd ../client
 npm run dev
-________________________________________
-📦 Deployment Plan
-Part	Platform
-Frontend	Vercel / Netlify
-Backend	Railway / Render
-Database	MongoDB Atlas
-You must deploy the backend with HTTPS enabled to use Razorpay in Live Mode.
-________________________________________
-📸 Screenshots
-Add screenshots of:
-•	Landing page
-•	Pricing section
-•	Razorpay checkout modal
-•	Dashboard UI (password list)
-________________________________________
-🧑‍💻 Author
+```
+
+---
+
+## 🌐 Production Deployment
+
+- **Frontend:** Vercel / Netlify
+- **Backend:** Railway / Render / Any Node.js host
+- **Database:** MongoDB Atlas
+- Set all environment variables in your deployment platform
+- Use HTTPS for backend in production (required by Razorpay Live Mode)
+
+---
+
+## 📸 Screenshots
+
+- Landing page
+- Pricing page
+- Razorpay checkout modal
+- Dashboard (password list)
+
+_(Add screenshots here)_
+
+---
+
+## 👤 Author
+
 Made with ❤️ by Yash Kumar Singh
-•	📧 yashkumarsingh@email.com
-•	💼 LinkedIn
-•	💻 GitHub
-________________________________________
-📄 License
+
+- 📧 yashksingh.dev@email.com
+- 💼 [LinkedIn](#)
+- 💻 [GitHub](#)
+
+---
+
+## 📄 License
+
 Licensed under the MIT License.

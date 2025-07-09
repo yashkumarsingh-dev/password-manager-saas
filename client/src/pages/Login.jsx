@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "../components/ui/button";
 import { login as loginUser } from "../services/auth";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
+import api from "../services/api";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "", token: "" });
@@ -17,6 +18,17 @@ export default function Login() {
     try {
       const res = await loginUser(form.email, form.password, form.token);
       localStorage.setItem("accessToken", res.accessToken);
+      localStorage.setItem("userId", res.userId);
+      // Fetch user status from backend
+      try {
+        const meRes = await api.get("/auth/me", {
+          headers: { Authorization: `Bearer ${res.accessToken}` },
+        });
+        localStorage.setItem("isPro", meRes.data.isPro ? "true" : "false");
+        console.log("[DEBUG] isPro from backend:", meRes.data.isPro);
+      } catch (err) {
+        localStorage.setItem("isPro", "false");
+      }
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.error || "Login failed");

@@ -15,6 +15,10 @@ export default function Register() {
     e.preventDefault();
     setError("");
     setOtpauthUrl("");
+    // Clear user-related localStorage keys on registration
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("isPro");
     try {
       const res = await registerUser(form.email, form.password);
       setOtpauthUrl(res.twoFactorSecret);

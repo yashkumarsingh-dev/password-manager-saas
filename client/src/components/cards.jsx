@@ -19,9 +19,10 @@ import {
   TableRow,
 } from "../components/ui/table";
 import { CheckIcon, MinusIcon } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import api from "../services/api";
 
 const planFeatures = [
   {
@@ -120,15 +121,31 @@ export default function PricingSectionCards() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Check if user is Pro (optional: fetch from backend or localStorage)
-  // For demo, check localStorage 'isPro'
-  useState(() => {
-    if (localStorage.getItem("isPro") === "true") setProActive(true);
+  useEffect(() => {
+    const fetchProStatus = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) return;
+      try {
+        const res = await api.get("/auth/me", {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        console.log("[DEBUG] /auth/me response:", res.data);
+        setProActive(res.data.isPro === true);
+        localStorage.setItem("isPro", res.data.isPro ? "true" : "false");
+      } catch {
+        console.log("[DEBUG] /auth/me error:", err);
+        setProActive(false);
+        localStorage.setItem("isPro", "false");
+      }
+    };
+    fetchProStatus();
   }, []);
 
   const handleSubscribe = async () => {
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem("userId");
+    console.log("[DEBUG] userId from localStorage:", userId);
+    console.log("[DEBUG] accessToken from localStorage:", accessToken);
     if (!accessToken || !userId) {
       navigate("/login");
       return;

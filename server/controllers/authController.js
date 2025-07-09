@@ -74,7 +74,7 @@ exports.login = async (req, res) => {
     const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "15m" });
     const refreshToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
 
-    res.json({ accessToken, refreshToken });
+    res.json({ accessToken, refreshToken, userId: user._id });
   } catch (err) {
     res.status(500).json({ error: "Login failed", details: err.message });
   }
@@ -156,5 +156,19 @@ exports.resetPassword = async (req, res) => {
     res
       .status(500)
       .json({ error: "Failed to reset password", details: err.message });
+  }
+};
+
+exports.getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select(
+      "isPro subscriptionStatus email"
+    );
+    if (!user) return res.status(404).json({ error: "User not found" });
+    res.json(user);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: "Failed to fetch user", details: err.message });
   }
 };
