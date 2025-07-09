@@ -208,7 +208,6 @@ npm run dev
 - Razorpay checkout modal
 - Dashboard (password list)
 
-_(Add screenshots here)_
 
 ---
 
