@@ -129,11 +129,9 @@ export default function PricingSectionCards() {
         const res = await api.get("/auth/me", {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
-        console.log("[DEBUG] /auth/me response:", res.data);
         setProActive(res.data.isPro === true);
         localStorage.setItem("isPro", res.data.isPro ? "true" : "false");
-      } catch {
-        console.log("[DEBUG] /auth/me error:", err);
+      } catch (err) {
         setProActive(false);
         localStorage.setItem("isPro", "false");
       }
@@ -144,8 +142,6 @@ export default function PricingSectionCards() {
   const handleSubscribe = async () => {
     const accessToken = localStorage.getItem("accessToken");
     const userId = localStorage.getItem("userId");
-    console.log("[DEBUG] userId from localStorage:", userId);
-    console.log("[DEBUG] accessToken from localStorage:", accessToken);
     if (!accessToken || !userId) {
       navigate("/login");
       return;

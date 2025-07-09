@@ -25,7 +25,6 @@ export default function Login() {
           headers: { Authorization: `Bearer ${res.accessToken}` },
         });
         localStorage.setItem("isPro", meRes.data.isPro ? "true" : "false");
-        console.log("[DEBUG] isPro from backend:", meRes.data.isPro);
       } catch (err) {
         localStorage.setItem("isPro", "false");
       }
