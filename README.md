@@ -182,7 +182,6 @@ Made with ❤️ by Yash Kumar Singh
 - 💻 [GitHub](#)
 
 ---
-
 ## 📄 License
 
 Licensed under the MIT License.
