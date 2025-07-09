@@ -9,7 +9,8 @@ A modern, secure, and production-ready **Password Manager SaaS** built with **Re
 - Securely store and manage passwords (vault)
 - End-to-End Encryption (E2EE) for all credentials
 - JWT-based authentication and protected routes
-- Two-Factor Authentication (2FA) with TOTP
+- **Two-Factor Authentication (2FA) with TOTP**
+  - _Requires an authenticator app (Google Authenticator, Microsoft Authenticator, Authy, etc.)_
 - Password reset via email (Gmail SMTP or SendGrid)
 - Free plan: 1 user, up to 10 passwords, basic features
 - Pro plan: 1 user, unlimited passwords, premium features (sharing, priority support)
@@ -61,12 +62,42 @@ password-manager-saas/
 
 ---
 
+## 🔐 Security & Authentication
+
+### Registration & 2FA Setup
+
+- **During registration, you must scan a QR code with an authenticator app (Google Authenticator, Microsoft Authenticator, Authy, etc.).**
+- After submitting your email and password, a QR code and otpauth URL will be shown.
+- Open your authenticator app, add a new account, and scan the QR code or enter the secret manually.
+- You will use the 6-digit code from your app to log in (TOTP-based 2FA).
+
+### Login
+
+- Enter your email, password, and the current 2FA code from your authenticator app.
+- If the 2FA code is incorrect or missing, login will fail.
+
+### Password Reset
+
+- Use the "Forgot your password?" link on the login page.
+- Enter your email to receive a secure reset link (expires in 30 minutes).
+- Set a new password via the link, then log in with your new credentials and 2FA code.
+
+### Security Best Practices
+
+- All passwords are encrypted with strong cryptography before storage.
+- 2FA is enforced for all users.
+- JWT tokens are used for secure session management.
+- Sensitive data (passwords, 2FA secrets) are never sent in plain text.
+- Always use a strong, unique password and enable 2FA on your email account as well.
+
+---
+
 ## 🔐 API Endpoints (Key)
 
 ### Auth:
 
-- `POST /api/auth/register` – Register a new user
-- `POST /api/auth/login` – Login user and return token & userId
+- `POST /api/auth/register` – Register a new user (returns 2FA QR code URL)
+- `POST /api/auth/login` – Login user and return token & userId (requires 2FA code)
 - `GET /api/auth/me` – Get current user's status (Pro/Free)
 - `POST /api/auth/request-reset` – Send password reset link
 - `POST /api/auth/reset-password` – Reset password via token
@@ -173,15 +204,35 @@ _(Add screenshots here)_
 
 ---
 
+## ❓ FAQ
+
+**Q: Do I need an authenticator app?**
+A: Yes. You must download an authenticator app (Google Authenticator, Microsoft Authenticator, Authy, etc.) to complete registration and log in. This app generates the 6-digit 2FA codes required for secure access.
+
+**Q: What if I lose access to my authenticator app?**
+A: You will need to reset your account via the password reset flow and re-register 2FA. For additional help, contact support.
+
+**Q: Is my data encrypted?**
+A: Yes. All passwords are encrypted with strong cryptography before being stored in the database.
+
+**Q: Can I export my passwords?**
+A: Yes. You can export your vault as CSV or PDF from the dashboard.
+
+**Q: What happens if I reach the Free plan limit?**
+A: You will be prompted to upgrade to Pro to store more than 10 passwords.
+
+---
+
 ## 👤 Author
 
 Made with ❤️ by Yash Kumar Singh
 
-- 📧 yashksingh.dev@email.com
+- 📧 yashkumarsingh@email.com
 - 💼 [LinkedIn](#)
 - 💻 [GitHub](#)
 
 ---
+
 ## 📄 License
 
 Licensed under the MIT License.
